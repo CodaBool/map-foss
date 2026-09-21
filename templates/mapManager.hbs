@@ -1,0 +1,286 @@
+<div class="standard-form sheet map-manager">
+  <nav class="sheet-tabs tabs">
+    <a class="active" data-action="tab" data-group="sheet" data-tab="general">
+      <i class="fa-solid fa-map"></i>
+      <label>{{{localize "map.manager.tabTitleMaps"}}}</label>
+    </a>
+    <a data-action="tab" data-group="sheet" data-action="tab" data-tab="automation">
+      <i class="fa-solid fa-code"></i>
+      <label>{{{localize "map.manager.tabTitleAutomation"}}}</label>
+    </a>
+    <a data-action="tab" data-group="sheet" data-action="tab" data-tab="extra">
+      <i class="fa-solid fa-sliders-simple"></i>
+      <label>{{{localize "map.manager.tabTitleExtra"}}}</label>
+    </a>
+  </nav>
+  <div class="tab active" data-group="sheet" data-tab="general">
+
+    <fieldset>
+        <legend><i class="fa-solid fa-layer-plus"></i> {{{localize "map.manager.addMaps"}}}</legend>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-link"></i> {{{localize "map.manager.addMapUrl"}}}</label>
+            <div class="form-fields">
+
+              <div contenteditable="true" id="map-url" style="
+                width: 300px;
+                height: 2rem;
+                border-radius: 4px;
+                background: rgb(48, 40, 49);
+                color: rgb(231, 209, 177);
+                line-height: 2rem;
+                padding: 0 1rem;
+                outline: 1px solid transparent;
+                cursor: text;
+                white-space: nowrap;
+                overflow-x: auto;
+              "></div>
+
+              <button type="submit" class="icon fa-regular fa-plus" data-action="create" data-tooltip="Add Map" style="flex:0"></button>
+            </div>
+        </div>
+
+        {{#if secret}}
+        <div class="form-group">
+            <label><i class="fa-solid fa-cloud"></i> {{{localize "map.manager.sync"}}}</label>
+            <div class="form-fields">
+              <button type="button" data-action="syncMaps" class="icon fa-solid fa-arrows-rotate" data-tooltip="Sync Maps" style="flex:1"></button>
+            </div>
+            <p class="hint" style="text-align: center">
+            {{{localize "map.manager.syncDescription" stargazerBaseURL=stargazerBaseURL}}}
+            </p>
+        </div>
+        {{else}}
+        <p style="font-size: 1.2em; text-align: center"><i class="fa-solid fa-key fa-bounce"></i> <button type="button" data-action="openSettings" style="display: inline; margin-left: 2em; width: 88%; border: 1px dashed rgba(255,255,255,.5)">{{{localize "map.manager.addSecret"}}}</button></p>
+        {{/if}}
+    </fieldset>
+    {{#if hasMaps}}
+
+        <!--
+        <fieldset>
+            <legend><i class="fa-solid fa-layer-plus"></i> Generation</legend>
+            <div class="form-group">
+                <label><i class="fa-solid fa-masks-theater"></i> Scene</label>
+                <div class="form-fields">
+                  <button type="button" data-action="generateScene" class="icon fa-solid fa-wand-magic-sparkles" style="flex:1"></button>
+                </div>
+                <p class="hint">Uses the default (starred) map to generate a scene</p>
+            </div>
+        </fieldset>
+        -->
+
+        <fieldset>
+            <legend><i class="fa-solid fa-map"></i> {{{localize "map.manager.tabTitleMaps"}}}</legend>
+
+            {{#each maps}}
+            <fieldset class="flexrow" style="background: {{this.color}}; flex-direction: row">
+                <legend style="font-size: 1.3em">{{this.map}}</legend>
+
+
+                <a class="region-element-name" data-action="open" uuid="{{this.uuid}}" data-tooltip="{{{localize "map.manager.tooltipOpen"}}}" style="font-size: 1.1em">
+                  {{this.name}}
+                </a>
+
+                <div
+                  class="region-element-controls"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 1.15em;
+                  "
+                >
+                  <!-- Default star + radio -->
+
+                  <i
+                    class="fa-solid fa-star"
+                    style="
+                      line-height: 1;
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  ></i>
+
+                  <input
+                    type="radio"
+                    name="defaultMap"
+                    data-action="changeDefault"
+                    uuid="{{this.uuid}}"
+                    data-tooltip="{{{localize "map.manager.tooltipDefault"}}}"
+                    {{#if (eq ../default this.uuid)}}checked{{/if}}
+                    style="
+                      width: 1.1em;
+                      height: 1.1em;
+                      margin: 0;
+                    "
+                  />
+
+                  <!-- Spacer pushes actions to the right -->
+                  <div
+                    aria-hidden="true"
+                    style="width: 10px;"
+                  >
+                    <span
+                      style="
+                        width: 1px;
+                        margin-top: .3em;
+                        height: 1.5em;
+                        background: rgba(255, 255, 255, 0.25);
+                        margin-left: auto;
+                        margin-right: auto;
+                        display: block;
+                      "
+                    ></span>
+                  </div>
+
+                  <!-- Action icons -->
+
+
+                  {{#unless (or (eq this.map "url") this.systemMap)}}
+
+                  <a
+                    class="control fa-solid fa-edit fa-fw"
+                    data-action="editRemoteMap"
+                    uuid="{{this.uuid}}"
+                    data-tooltip="{{{localize "map.manager.tooltipEdit"}}} '{{this.name}}'"
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 1.9em;
+                      height: 1.9em;
+                      text-decoration: none;
+                    "
+                  ></a>
+
+                  <a
+                    class="control fa-solid fa-wand-magic-sparkles"
+                    data-action="generateScene"
+                    uuid="{{this.uuid}}"
+                    data-tooltip="{{{localize "map.manager.tooltipGenerate"}}} '{{this.name}}'"
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 1.9em;
+                      height: 1.9em;
+                      text-decoration: none;
+                    "
+                  ></a>
+                  {{/unless}}
+
+                  {{#unless this.systemMap}}
+                  <a
+                    class="control fa-solid fa-trash fa-fw"
+                    data-action="delete"
+                    uuid="{{this.uuid}}"
+                    data-tooltip="{{{localize "map.manager.tooltipDelete"}}} '{{this.name}}'"
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 1.9em;
+                      height: 1.9em;
+                      text-decoration: none;
+                    "
+                  ></a>
+
+
+                  <a
+                    class="fa-solid fa-arrow-up-right-from-square"
+                    target="_blank"
+
+                    {{#if (eq this.map "url")}}
+                    href="{{this.url}}"
+                    {{else}}
+                    href="{{../stargazerBaseURL}}/{{this.map}}/{{this.uuid}}"
+                    {{/if}}
+
+                    data-tooltip="{{{localize "map.manager.tooltipView"}}} '{{this.name}}'"
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 1.9em;
+                      height: 1.9em;
+                      text-decoration: none;
+                    "
+                  ></a>
+                  {{/unless}}
+
+                  {{#unless (or (eq this.map "url") this.systemMap)}}
+
+                  <a
+                    class="fa-solid fa-gear"
+                    target="_blank"
+                    href="{{../stargazerBaseURL}}/{{this.map}}/{{this.uuid}}/settings"
+                    data-tooltip="{{{localize "map.manager.tooltipEditRemote"}}} '{{this.name}}'"
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 1.9em;
+                      height: 1.9em;
+                      text-decoration: none;
+                    "
+                  ></a>
+                  {{/unless}}
+                </div>
+
+            </fieldset>
+            {{/each}}
+        </fieldset>
+    {{/if}}
+
+  </div>
+
+  <div class="tab" data-group="sheet" data-tab="automation">
+    {{#if (and (gt numOfMaps 0) default)}}
+        <fieldset>
+          <legend><i class="fa-solid fa-code"></i> {{{localize "map.manager.tabTitleAutomation"}}}</legend>
+
+          <div class="form-group">
+              <label><i class="fa-solid fa-users-line"></i> {{{localize "map.manager.openForAll"}}}</label>
+              <div class="form-fields">
+                <button type="button" data-action="openForAll" class="icon fa-solid fa-users-line" data-tooltip="Open default map for all" style="flex:1"></button>
+              </div>
+              <p class="hint">{{{localize "map.manager.openForAllHint"}}}</p>
+          </div>
+
+          <div class="form-group">
+              <label><i class="fa-solid fa-user-check"></i> {{{localize "map.manager.openForSelected"}}}</label>
+              <div class="form-fields">
+                <button type="button" data-action="openForUsers" class="icon fa-solid fa-user-check" data-tooltip="Open default map for selected users" style="flex:1"></button>
+              </div>
+              <p class="hint">{{{localize "map.manager.openForSelectedHint"}}}</p>
+          </div>
+      </fieldset>
+    {{else}}
+    <p style="font-size: 1.5em; margin-top: 1em; margin-bottom: 1em; text-align: center"><i class="fa-sharp fa-solid fa-location-pin-slash fa-bounce"></i> {{{localize "map.manager.noMapsFound"}}}</p>
+    {{/if}}
+  </div>
+  <div class="tab" data-group="sheet" data-tab="extra">
+
+    <fieldset>
+      <legend><i class="fa-solid fa-gear"></i> General</legend>
+      <div class="form-group">
+          <label><i class="fa-solid fa-bug"></i> {{{localize "map.manager.reportABug"}}}</label>
+          <button type="button" class="icon fa-solid fa-comment" data-action="feedback" style="flex:1.89"></button>
+      </div>
+      <div class="form-group">
+          <label><i class="fa-solid fa-list"></i> {{#with (lookup moduleVersion 0)}}{{this}}{{/with}} {{{localize "map.manager.changelog"}}}</label>
+          <a href="https://github.com/CodaBool/map-foss/blob/main/changelog.md#version-{{#with (lookup moduleVersion 1)}}{{this}}{{/with}}" target="_blank"><button type="button" class="icon fa-solid fa-arrow-up-right-from-square" style="width: 100%"></button></a>
+      </div>
+      <div class="form-group">
+          <label><i class="fa-solid fa-check-to-slot"></i> {{{localize "map.manager.vote"}}}</label>
+          <a href="{{stargazerBaseURL}}/contribute/vote" target="_blank"><button type="button" class="icon fa-solid fa-arrow-up-right-from-square" style="width: 100%"></button></a>
+      </div>
+      <div class="form-group">
+          <label><i class="fa-solid fa-scroll"></i> {{{localize "map.manager.quests"}}}</label>
+          <a href="https://github.com/CodaBool/stargazer/wiki/Quests" target="_blank"><button type="button" class="icon fa-solid fa-arrow-up-right-from-square" style="width: 100%"></button></a>
+      </div>
+    </fieldset>
+  </div>
+
+</div>

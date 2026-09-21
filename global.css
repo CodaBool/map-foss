@@ -1,0 +1,31 @@
+#map-location-tooltip {
+  opacity: 0;
+  display: block;
+  background-color: black;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  pointer-events: none;
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 1em;
+  max-width: 400px;
+  overflow: hidden;
+  line-break: anywhere;
+}
+
+/* makes forms more vertically compact */
+.map-compact fieldset {
+  padding: 0.5em;
+  gap: 0.5em;
+  padding-bottom: 1em;
+}
+
+.map-scroll .window-content {
+  max-height: 800px;
+  overflow: auto;
+}
+
+.map-dialog-note-click button {
+  font-size: .9em;
+}

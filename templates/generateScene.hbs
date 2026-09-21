@@ -1,0 +1,75 @@
+<div class="region-config standard-form map-generate-scene" style="max-width: 600px">
+    <div class="standard-form">
+
+        <!--
+        <fieldset>
+            <legend><i class="fa-solid fa-gear"></i> General</legend>
+            <div class="form-group">
+                <label>Name</label>
+                <div class="form-fields">
+                    <input type="text" name="name" value="{{name}}">
+                </div>
+                <p class="hint">An identifier for this map</p>
+            </div>
+        </fieldset>
+        -->
+
+
+
+        <fieldset>
+            <legend><i class="fa-solid fa-image"></i> Scene Generation</legend>
+
+            <div class="form-group">
+                <label>Width</label>
+                <div class="form-fields">
+                    <input type="number" name="autoWidth" value="{{autoWidth}}">
+                </div>
+                <p class="hint">{{{localize "map.generate.widthHint"}}}</p>
+            </div>
+            <div class="form-group">
+                <label>Height</label>
+                <div class="form-fields">
+                    <input type="number" name="autoHeight" value="{{autoHeight}}">
+                </div>
+                <p class="hint">{{{localize "map.generate.heightHint"}}}</p>
+            </div>
+
+            <div class="form-group">
+                <label>Zoom & Center</label>
+                <button type="button" data-action="calibrate" class="icon fa-solid fa-location-crosshairs" style="flex: 1.9"></button>
+                <p class="hint">{{{localize "map.generate.zoomHint"}}}</p>
+            </div>
+
+            <div class="form-group">
+                <div class="form-fields">
+                    <label>Zoom</label>
+                    <input type="text" value="{{autoZoom}}" readonly>
+                    <label>Center</label>
+                    <input type="text" value="{{autoLat}},{{autoLng}}" readonly>
+                </div>
+            </div>
+
+            <p class="hint">{{{localize "map.generate.backgrounds" estimatedSize=estimatedSize}}}</p>
+
+
+        </fieldset>
+
+        <footer class="form-footer">
+            <button data-action="generate">
+                <i class="fa-solid fa-wand-magic-sparkles" inert=""></i>
+                <span>{{{localize "map.generate.generateScene"}}}</span>
+            </button>
+        </footer>
+
+        <!--
+        <fieldset>
+            <legend><i class="fa-solid fa-pencil"></i> Edit Map</legend>
+            <div class="form-group">
+                <button type="button" data-action="link" class="icon fa-solid fa-pencil" ></button>
+                <p class="hint">Create, update, destroy your own locations. As well as link locations to Foundry documents (Journal, Page, Macro)</p>
+            </div>
+        </fieldset>
+        -->
+    <div>
+    <button data-action="refresh" style="display: none" />
+</div>

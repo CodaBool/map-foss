@@ -1,0 +1,108 @@
+<section class="tab-panel stargazer active" data-tab="stargazer" data-preserve-scroll="">
+  <div class="content-header">
+    <h2><i class="fa-solid fa-map"></i> Stargazer</h2>
+  </div>
+  <article class="">
+    <section class="">
+
+    {{#if uuid}}
+      {{#if isGM}}
+
+        <div style="display: flex">
+          <button type="button" onclick='(() => {
+            const j = fromUuidSync("{{jid}}")
+            j.setFlag("map", "location", null)
+          })()'>Remove Map</button>
+
+
+          <button type="button" onclick='(() => {
+
+            const maps = game.settings.get("map", "maps")
+            const map = maps["{{uuid}}"]
+            new window.MapIFrame("{{uuid}}", "{{iframe}}?quest=1&hamburger=0&toolbox=0&zoom=0&tutorial=0").render(true)
+            window.questLocationSet = event => {
+              if (event.data.type === "questLocationSet") {
+                delete event.data.type
+                const j = fromUuidSync("{{jid}}")
+                j.setFlag("map", "location", { ...event.data, questId: "{{jid}}"})
+                foundry.applications.instances.forEach(a => {
+                  if (a.uuid === "{{uuid}}" && a.url) a.close()
+                })
+              }
+            }
+            window.addEventListener("message", window.questLocationSet)
+
+          })()'>Set {{#if uuid}}New{{/if}} Location</button>
+
+          </div>
+
+      {{/if}}
+
+
+        <div>
+          <div class="loading" style="z-index: 1; position: absolute; width: {{width}}px; height: {{height}}px; display: flex; justify-content: center; align-items: center;">
+              <div class="spinner"></div>
+          </div>
+          <style>
+              .spinner {
+                  border-style: solid;
+                  border-color: #312c85;
+                  border-top-color: #0000;
+                  border-width: 4px;
+                  border-radius: 50%;
+                  width: 35px;
+                  height: 35px;
+                  animation: spin .8s linear infinite;
+              }
+              @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+              }
+          </style>
+
+          <iframe src="{{iframe}}?goto={{goto}}&search=0&cheeseburger=1&iframe=1&tutorial=0&editor=0&skipCreation=1&controls=0" loading="lazy" width="{{width}}" height="{{height}}" frameborder="0" style="z-index: 2; position: absolute;"></iframe>
+        </div>
+
+    {{else}}
+
+
+      <button type="button" onclick='(() => {
+
+        const mapsRaw = game.settings.get("map", "maps")
+        let maps = foundry.utils.deepClone(mapsRaw)
+        delete maps["meta"]
+        maps = Object.values(maps)
+
+        foundry.applications.api.DialogV2.confirm({
+          window: { title: "Pick a Map" },
+          classes: ["terminal-map-selector"],
+          position: { width: 400 },
+          content: `
+            <p style="font-size:1.2em">
+              <strong>Pick a map for {{name}}</strong>
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px">
+              ${maps.map((map, index) => `
+                <label style="display: flex; align-items: center; gap: 10px">
+                  <input type="radio" name="map" value="${map.uuid}" style="margin: 0; appearance: auto; opacity: 1; position: static; width: 18.5px; height: 18.5px;">
+                  <span>${map.name}</span>
+                </label>
+              `).join("")}
+            </div>
+          `,
+        }).then((result) => {
+          if (!result) return
+          const selectedMap = document.querySelector(".terminal-map-selector input:checked")
+          const j = fromUuidSync("{{jid}}")
+          j.setFlag("map", "location", {uuid: selectedMap.value})
+        })
+
+
+        })()'>Add Map</button>
+
+    {{/if}}
+
+
+    </section>
+  </article>
+</section>

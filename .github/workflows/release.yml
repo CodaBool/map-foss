@@ -1,0 +1,40 @@
+on:
+  push:
+    tags:
+      - "v*" # run only against tags
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v7
+      - name: jq props and store module
+        run: |
+          echo "version=$(cat module.json | jq -r .version)" >> $GITHUB_ENV
+          echo "minimum=$(cat module.json | jq -r .compatibility.minimum)" >> $GITHUB_ENV
+          echo "maximum=$(cat module.json | jq -r .compatibility.maximum)" >> $GITHUB_ENV
+          echo "verified=$(cat module.json | jq -r .compatibility.verified)" >> $GITHUB_ENV
+      # - name: foundry release
+      #   run: |
+      #     JSON_PAYLOAD=$(cat <<EOF
+      #     {
+      #       "id": "map",
+      #       "dry-run": false,
+      #       "release": {
+      #         "version": "${{ env.version }}",
+      #         "manifest": "https://github.com/CodaBool/map-foss/releases/download/v${{ env.version }}/module.json",
+      #         "notes": "https://github.com/CodaBool/map-foss/blob/main/changelog.md",
+      #         "compatibility": {
+      #           "minimum": "${{ env.minimum }}",
+      #           "verified": "${{ env.verified }}",
+      #           "maximum": "${{ env.maximum }}"
+      #         }
+      #       }
+      #     }
+      #     EOF
+      #     )
+
+      #     curl -s -X POST https://api.foundryvtt.com/_api/packages/release_version \
+      #       -H "Content-Type: application/json" \
+      #       -H "Authorization: ${{ secrets.FOUNDRY_TOKEN }}" \
+      #       -d "$JSON_PAYLOAD"

@@ -1,0 +1,27 @@
+<div>
+    <h1>{{title}}</h1>
+    
+    {{#if isScene}}
+    
+        {{#each objs}}
+        <div style="margin: 1em; background: rgba(0,0,0,.05)">
+            <p onclick="game.scenes.get('{{this.id}}').view() ; $('.map-scene-selector').find('.header-button').click()" style="font-size: 1.2em; cursor: pointer">
+                {{this.name}}
+            </p>
+        </div>
+        {{/each}}
+    
+    {{else}}
+    
+        {{#each objs}}
+        <div style="margin: 1em; background: rgba(0,0,0,.05)">
+            <p onclick="" style="font-size: 1.2em; cursor: pointer">
+                {{this.name}}
+            </p>
+        </div>
+        {{/each}}
+    
+    {{/if}}
+    
+    
+</div>

@@ -1,0 +1,85 @@
+{
+  "id": "map",
+  "title": "Map - Stargazer",
+  "version": "0.0.7",
+  "manifest": "https://raw.githubusercontent.com/CodaBool/map-foss/main/module.json",
+  "changelog": "https://github.com/CodaBool/map-foss/blob/main/changelog.md",
+  "download": "https://github.com/CodaBool/map-foss/archive/v0.0.7.zip",
+  "url": "https://github.com/CodaBool/map-foss",
+  "bugs": "https://github.com/CodaBool/map-foss/issues",
+  "description": "Create custom maps using Stargazer",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "authors": [
+    {
+      "name": "CodaBool",
+      "discord": "codabool",
+      "email": "codabool@pm.me",
+      "url": "https://codabool.com"
+    }
+  ],
+  "esmodules": [
+    "scripts/hooks.js",
+    "scripts/ui.js",
+    "scripts/util.js",
+    "scripts/tutorial.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "localization/english.json"
+    },
+    {
+      "lang": "es",
+      "name": "Spanish",
+      "path": "localization/spanish.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "localization/german.json"
+    },
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "localization/italian.json"
+    },
+    {
+      "lang": "ja",
+      "name": "日本語",
+      "path": "localization/japanese.json"
+    },
+    {
+      "lang": "ko",
+      "name": "한국어",
+      "path": "localization/korean.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "localization/polish.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "localization/portuguese.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "localization/russian.json"
+    },
+    {
+      "lang": "zh-CN",
+      "name": "简体中文",
+      "path": "localization/chinese.json"
+    }
+  ],
+  "socket": true,
+  "persistentStorage": true,
+  "styles": ["global.css"]
+}

@@ -1,0 +1,166 @@
+<div style="display:flex; flex-direction:column; gap:.6em;">
+
+
+  {{!-- Hints --}}
+  {{#if (or prettyLink hasQuests hasGoto)}}
+    <p class="hint" style="text-align:center; margin:0; color:#b6b6b6;">
+      double click to open
+    </p>
+  {{/if}}
+
+
+  {{!-- Header --}}
+  <h1 style="text-align:center; margin:0;">{{name}}</h1>
+  <p style="text-align:center; margin:0; color:#b6b6b6;">
+    {{#if starType}}{{starType}} {{/if}}{{type}}
+  </p>
+
+  {{!-- Optional description
+  {{#if description}}
+    <div style="border:1px dashed #b6b6b6; padding:.35em .5em; border-radius:8px;">
+      {{{description}}}
+    </div>
+  {{/if}}
+  --}}
+
+  {{!-- Optional image --}}
+  {{#if image}}
+    <div style="display:flex; flex-direction:column; align-items:center; gap:.35em;">
+      <img src="{{image}}" alt="{{caption}}" style="max-height:80px; width:100%; object-fit:contain;" />
+      {{#if caption}}
+        <p style="text-align:center; font-size:.75rem; line-height:1rem; font-style:italic; margin:0;">
+          {{caption}}
+        </p>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{!-- Quests --}}
+  {{#if hasQuests}}
+
+    <h3 style="text-align:center; margin:.15em 0 0;">Quests</h3>
+
+    {{#each quests}}
+
+      {{!-- Player sees only visible quests; GM sees all --}}
+      {{#if this.visible}}
+        <div style="border:1px dashed #b6b6b6; border-radius:10px; padding:.45em .55em; display:flex; line-break:auto; flex-direction:column; gap:.45em;">
+          {{!-- Quest header row --}}
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:.5em;">
+            <div style="display:flex; align-items:center; gap:.45em; min-width:0;">
+              <p style="margin:0; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                {{this.title}}
+              </p>
+            </div>
+
+            {{#if ../isGM}}
+              <span style="font-size:.75em; color:#b6b6b6; white-space:nowrap;">visible</span>
+            {{/if}}
+          </div>
+
+          {{!-- Objectives / Tasks table (space-efficient) --}}
+          {{#if this.objectives}}
+            <table style="width:100%; border-collapse:collapse; margin-top:.1em;">
+              <tbody>
+                {{#each this.objectives}}
+                  {{!-- Player sees only visible objectives; GM sees all --}}
+                  {{#if this.visible}}
+                    <tr>
+                      <td style="width:1%; white-space:nowrap; padding:.12em .35em .12em 0; vertical-align:top;">
+                        {{#if this.completed}}
+                          <i class="fas fa-check-square" style="color:#2e7d32;" title="Completed"></i>
+                        {{else}}
+                          {{#if this.failed}}
+                            <i class="fas fa-times-circle" style="color:#c62828;" title="Failed"></i>
+                          {{else}}
+                            <i class="fas fa-square" style="color:#b6b6b6;" title="Incomplete"></i>
+                          {{/if}}
+                        {{/if}}
+                      </td>
+                      <td style="padding:.12em 0; vertical-align:top;">
+                        {{this.text}}
+                      </td>
+                    </tr>
+                  {{else}}
+                    {{#if ../../isGM}}
+                      <tr style="opacity:.9;">
+                        <td style="width:1%; white-space:nowrap; padding:.12em .35em .12em 0; vertical-align:top;">
+                          {{#if this.completed}}
+                            <i class="fas fa-check-square" style="color:#2e7d32;" title="Completed"></i>
+                          {{else}}
+                            {{#if this.failed}}
+                              <i class="fas fa-times-circle" style="color:#c62828;" title="Failed"></i>
+                            {{else}}
+                              <i class="fas fa-square" style="color:#b6b6b6;" title="Incomplete"></i>
+                            {{/if}}
+                          {{/if}}
+                          <i class="fas fa-eye-slash" style="color:#777; margin-left:.25em;" title="Hidden"></i>
+                        </td>
+                        <td style="padding:.12em 0; vertical-align:top;">
+                          {{this.text}}
+                        </td>
+                      </tr>
+                    {{/if}}
+                  {{/if}}
+                {{/each}}
+              </tbody>
+            </table>
+          {{/if}}
+        </div>
+
+      {{else}}
+        {{!-- Hidden quest: GM-only --}}
+        {{#if ../isGM}}
+          <div style="border:1px dashed #b6b6b6; border-radius:10px; padding:.45em .55em; display:flex; flex-direction:column; gap:.45em; opacity:.92;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:.5em;">
+              <div style="display:flex; align-items:center; gap:.45em; min-width:0;">
+                <i class="fas fa-eye-slash" style="color:#777;" title="Hidden"></i>
+
+                {{#if this.completed}}
+                  <i class="fas fa-check-circle" style="color:#2e7d32;" title="Completed"></i>
+                {{/if}}
+                {{#if this.failed}}
+                  <i class="fas fa-times-circle" style="color:#c62828;" title="Failed"></i>
+                {{/if}}
+
+                <p style="margin:0; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  {{this.title}}
+                </p>
+              </div>
+
+              <span style="font-size:.75em; color:#777; white-space:nowrap;">hidden</span>
+            </div>
+
+            {{!-- GM sees all objectives; mark hidden ones --}}
+            {{#if this.objectives}}
+              <table style="width:100%; border-collapse:collapse; margin-top:.1em;">
+                <tbody>
+                  {{#each this.objectives}}
+                    <tr style="{{#unless this.visible}}opacity:.9;{{/unless}}">
+                      <td style="width:1%; white-space:nowrap; padding:.12em .35em .12em 0; vertical-align:top;">
+                        {{#if this.completed}}
+                          <i class="fas fa-check-square" style="color:#2e7d32;" title="Completed"></i>
+                        {{/if}}
+                        {{#if this.failed}}
+                          <i class="fas fa-times-circle" style="color:#c62828;" title="Failed"></i>
+                        {{/if}}
+                        {{#unless this.visible}}
+                          <i class="fas fa-eye-slash" style="color:#777; margin-left:.25em;" title="Hidden"></i>
+                        {{/unless}}
+                      </td>
+                      <td style="padding:.12em 0; vertical-align:top;">
+                        {{this.text}}
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            {{/if}}
+          </div>
+        {{/if}}
+      {{/if}}
+
+    {{/each}}
+
+  {{/if}}
+</div>
