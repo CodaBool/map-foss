@@ -32,33 +32,42 @@ jobs:
             fi
           done < changelog.md
           echo "$changelog_contents" > latest.md
+      - name: Build release zip
+        run: |
+          rm private.md changelog.md readme.md license
+          rm -rf .github .git
+          zip -r map.zip .
       # https://github.com/marketplace/actions/gh-release
       - uses: softprops/action-gh-release@v3
         with:
           body_path: latest.md
           tag_name: v${{ env.version }}
-          files: module.json
-      # - name: foundry release
-      #   run: |
-      #     JSON_PAYLOAD=$(cat <<EOF
-      #     {
-      #       "id": "map",
-      #       "dry-run": false,
-      #       "release": {
-      #         "version": "${{ env.version }}",
-      #         "manifest": "https://github.com/CodaBool/map-foss/releases/download/v${{ env.version }}/module.json",
-      #         "notes": "https://github.com/CodaBool/map-foss/blob/main/changelog.md",
-      #         "compatibility": {
-      #           "minimum": "${{ env.minimum }}",
-      #           "verified": "${{ env.verified }}",
-      #           "maximum": "${{ env.maximum }}"
-      #         }
-      #       }
-      #     }
-      #     EOF
-      #     )
+          files: |
+            module.json
+            map.zip
+      - name: foundry release
+        env:
+          FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_TOKEN }}
+        run: |
+          JSON_PAYLOAD=$(cat <<EOF
+          {
+            "id": "map",
+            "dry-run": false,
+            "release": {
+              "version": "${{ env.version }}",
+              "manifest": "https://github.com/CodaBool/map-foss/releases/download/v${{ env.version }}/module.json",
+              "notes": "https://github.com/CodaBool/map-foss/blob/main/changelog.md",
+              "compatibility": {
+                "minimum": "${{ env.minimum }}",
+                "verified": "${{ env.verified }}",
+                "maximum": "${{ env.maximum }}"
+              }
+            }
+          }
+          EOF
+          )
 
-      #     curl -s -X POST https://api.foundryvtt.com/_api/packages/release_version \
-      #       -H "Content-Type: application/json" \
-      #       -H "Authorization: ${{ secrets.FOUNDRY_TOKEN }}" \
-      #       -d "$JSON_PAYLOAD"
+          curl -s -X POST https://api.foundryvtt.com/_api/packages/release_version \
+            -H "Content-Type: application/json" \
+            -H "Authorization: ${FOUNDRY_TOKEN}" \
+            -d "$JSON_PAYLOAD"

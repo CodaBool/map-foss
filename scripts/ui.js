@@ -671,25 +671,6 @@ export class MapManager extends HandlebarsApplicationMixin(ApplicationV2) {
     new Feedback().render(true)
   }
 
-  // static async premium() {
-  //   const secret = game.settings.get("map", "secret")
-  //   const url = game.settings.get("map", "proxy")
-  //   const world = encodeURIComponent(`${game.system.id}@${window.location.host}`)
-  //   const i = await new IFrame(null, `${url}/checkout/redeem?secret=${secret}&world=${world}&salt=${SALT}`, "Activate Stargazer").render(true)
-
-  //   window.removeEventListener("message", this.listener)
-  //   this.listener = async event => {
-  //     if (event.origin !== game.settings.get("map", "proxy")) return
-  //     if (event.data.type === "premium") {
-  //       foundry.applications.instances.forEach(a => {
-  //         if (a.id === i.id) a.close()
-  //       })
-  //       ui.notifications.info(event.data.msg)
-  //     }
-  //   }
-  //   window.addEventListener("message", this.listener)
-  // }
-
   static async delete(e) {
     const uuid = e.target.attributes.uuid.value
     const maps = game.settings.get("map", "maps")

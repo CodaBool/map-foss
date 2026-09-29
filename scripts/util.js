@@ -3,7 +3,7 @@
 import { IFrame, MapManager } from "./ui.js"
 
 // export const STARGAZER_URL = "http://192.168.0.16:3000"
-export const STARGAZER_URL = "https://stargazer.vercel.app"
+export const STARGAZER_URL = "https://the-cartographer.vercel.app"
 
 export function getLocations(id) {
   const arr = []

@@ -4,7 +4,7 @@
   "version": "0.0.7",
   "manifest": "https://raw.githubusercontent.com/CodaBool/map-foss/main/module.json",
   "changelog": "https://github.com/CodaBool/map-foss/blob/main/changelog.md",
-  "download": "https://github.com/CodaBool/map-foss/archive/v0.0.7.zip",
+  "download": "https://github.com/CodaBool/map-foss/releases/download/v0.0.7/map.zip",
   "url": "https://github.com/CodaBool/map-foss",
   "bugs": "https://github.com/CodaBool/map-foss/issues",
   "description": "Create custom maps using Stargazer",
